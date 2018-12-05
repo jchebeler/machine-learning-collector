@@ -1,5 +1,20 @@
-$color: red;
-
-div {
-	border: 1px solid $color;
+div.content {
+	width: 90%;
+    margin: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+	table {
+		width:100%;
+		tr {
+			td, th {
+				width: 15%;
+				text-align: center;
+				&.question {
+					text-align: left;
+					width:70%;
+				}
+			}
+			
+		}
+	}
 }
