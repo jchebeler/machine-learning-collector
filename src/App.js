@@ -4,28 +4,33 @@ import './App.scss';
 class App extends Component {
   constructor(props) {
 	super(props);
-	this.data = [
-		{
-			question: 'how are you?'
-		},
-		{
-			question: 'what is my purpose?'
-		},
-		{
-			question: 'what is your name?'
-		}
-	];
 	this.state = {
+		data:null,
 		indResponses:[],
 		depResponses:[],
 	}
   }
   
+  componentWillMount() {
+    let csvFilePath = require('./data.csv');
+    let Papa = require("papaparse/papaparse.min.js");
+    Papa.parse(csvFilePath, {
+      download: true,
+      complete: this.updateData
+    });
+  };
+  
+  updateData = (result) => {
+	// manipulate the results for just the questions
+	let questions = result.data[1].slice(10,result.data[1].length);
+	this.setState({data: questions});
+  };
+  
   tableRows = () => {
-	let rows = this.data.map((row, key) => {
+	let rows = this.state.data.map((row, key) => {
       return (
         <tr key={key}>
-			<td className={'question'}> {`${key + 1}) ${row.question}`} </td>
+			<td className={'question'}> {`${key + 1}) ${row}`} </td>
 			<td > 
 				<input type="checkbox" value="inp" name={`question_${key}`} checked={this.state.indResponses.indexOf(key) > -1} 
 					onChange={(e) => this.handleChange(e, key, 'inp')} />
@@ -104,9 +109,9 @@ class App extends Component {
   handleSubmit = () => {
 	  const allowSubmission = this.verifyData();
 	  if(allowSubmission) {
-		  //this.state.indResponses.sort();
-		  //this.state.depResponses.sort();
-		  alert('Congrats, your data has been submitted.');
+		  const indSubmissions = this.state.indResponses.sort((a, b) => a - b);
+		  const depSubmissions = this.state.depResponses.sort((a, b) => a - b);
+		  alert('Congrats, your data has been submitted.  Independent Subs ' + indSubmissions + '.  Dependent Subs ' + depSubmissions + '.');
 	  }
 	  else {
 		  alert('Bad Input: You must select at least 1 independent variable and 1 dependent variable, or 2 independent variables to continue. ');
@@ -129,7 +134,9 @@ class App extends Component {
 						<th> Independent </th>
 						<th> Dependent </th>
 					</tr>
-					{this.tableRows()}
+					{this.state.data &&
+						this.tableRows()
+					}
 				</tbody>
 			</table>
 			<div>
