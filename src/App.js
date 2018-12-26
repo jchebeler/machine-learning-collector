@@ -109,9 +109,19 @@ class App extends Component {
   handleSubmit = () => {
 	  const allowSubmission = this.verifyData();
 	  if(allowSubmission) {
-		  const indSubmissions = this.state.indResponses.sort((a, b) => a - b);
-		  const depSubmissions = this.state.depResponses.sort((a, b) => a - b);
-		  alert('Congrats, your data has been submitted.  Independent Subs ' + indSubmissions + '.  Dependent Subs ' + depSubmissions + '.');
+		  let indSubmissions = this.state.indResponses.sort((a, b) => a - b);
+		  let depSubmissions = this.state.depResponses.sort((a, b) => a - b);
+		  indSubmissions = indSubmissions.toString();
+		  depSubmissions = depSubmissions.toString();
+		  const url = 'http://localhost:5000/dataselect?independent=' + indSubmissions + '&dependent=' + depSubmissions;
+		  fetch(url)
+		    .then((response) => {
+		      // figure out why this isnt catching the response correctly
+		      // alert('Congrats, your data has been submitted.  Independent Subs ' + indSubmissions + '.  Dependent Subs ' + depSubmissions + '.');
+		    })
+		    .catch(response => {
+		      // alert('Something went wrong with the submissions.');
+		    });
 	  }
 	  else {
 		  alert('Bad Input: You must select at least 1 independent variable and 1 dependent variable, or 2 independent variables to continue. ');
@@ -119,7 +129,9 @@ class App extends Component {
   };
   
   verifyData = () => {
-	  if(this.state.indResponses.length >= 2 || (this.state.depResponses.length >= 1 && this.state.indResponses >= 1)){
+	  const indCount = this.state.indResponses.length;
+	  const depCount = this.state.depResponses.length;
+	  if(indCount >= 2 || (indCount >= 1 && depCount >= 1)){
 		  return true;
 	  }
 	  return false;
