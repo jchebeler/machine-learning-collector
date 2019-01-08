@@ -11,6 +11,10 @@ class App extends Component {
 	}
   }
   
+  componentDidMount() {
+	document.title = 'ML Live!';
+  }
+  
   componentWillMount() {
     let csvFilePath = require('./data.csv');
     let Papa = require("papaparse/papaparse.min.js");
@@ -29,15 +33,21 @@ class App extends Component {
   tableRows = () => {
 	let rows = this.state.data.map((row, key) => {
       return (
-        <tr key={key}>
+        <tr className={'question-row'} key={key}>
 			<td className={'question'}> {`${key + 1}) ${row}`} </td>
-			<td > 
-				<input type="checkbox" value="inp" name={`question_${key}`} checked={this.state.indResponses.indexOf(key) > -1} 
-					onChange={(e) => this.handleChange(e, key, 'inp')} />
+			<td >
+				<label class="switch">
+					<input type="checkbox" value="inp" name={`question_${key}`} checked={this.state.indResponses.indexOf(key) > -1} 
+						onChange={(e) => this.handleChange(e, key, 'inp')} />
+					<span class="slider round"></span>
+				</label>
 			</td>
-			<td > 
-				<input type="checkbox" value="dep"  name={`question_${key}`} checked={this.state.depResponses.indexOf(key) > -1} 
-					onChange={(e) => this.handleChange(e, key, 'dep')} />
+			<td >
+				<label class="switch">
+					<input type="checkbox" value="dep"  name={`question_${key}`} checked={this.state.depResponses.indexOf(key) > -1} 
+						onChange={(e) => this.handleChange(e, key, 'dep')} />
+					<span class="slider round"></span>
+				</label>
 			</td>
 		</tr>
       );
@@ -45,8 +55,8 @@ class App extends Component {
 	return (
 		<React.Fragment>
 			{rows}
-			<tr>
-				<td className={'question'}></td>
+			<tr className={'submit-row'}>
+				<td ></td>
 				<td ></td>
 				<td > 
 					<button onClick={() => this.handleSubmit()}>Submit </button>
@@ -113,7 +123,7 @@ class App extends Component {
 		  let depSubmissions = this.state.depResponses.sort((a, b) => a - b);
 		  indSubmissions = indSubmissions.toString();
 		  depSubmissions = depSubmissions.toString();
-		  const url = 'http://localhost:5000/dataselect?independent=' + indSubmissions + '&dependent=' + depSubmissions;
+		  const url = 'http://192.168.2.70/dataselect?independent=' + indSubmissions + '&dependent=' + depSubmissions;
 		  fetch(url)
 		    .then((response) => {
 		      // figure out why this isnt catching the response correctly
@@ -151,10 +161,10 @@ class App extends Component {
 					}
 				</tbody>
 			</table>
-			<div>
+			{/*}<div>
 				<div>{`Independent Results: ${this.state.indResponses.length > 0 ? this.state.indResponses : 'N/A'}`}</div> 
 				<div>{`Dependent Results: ${this.state.depResponses.length > 0 ? this.state.depResponses : 'N/A'}`}</div>
-			</div>
+			</div>*/}
 		</div>
     );
   }
