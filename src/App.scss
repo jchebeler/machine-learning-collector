@@ -3,6 +3,13 @@ div.content {
     margin: auto;
     margin-top: 1rem;
     margin-bottom: 1rem;
+	
+	.loader  {
+		position: fixed;
+		left: 50%;
+		top: 35%;
+		z-index: 9999;
+	}
 	table {
 		width:100%;
 		border: 1px solid grey;
@@ -38,7 +45,7 @@ div.content {
 				}
 				
 				&:hover {
-					background-color: rgb(228,242,211);
+					background-color: rgb(128,223,96);
 					transition: background-color .5s ease;
 				}
 			
@@ -48,6 +55,7 @@ div.content {
 				background-color: #353535;
 				
 				button {
+					outline: none;
 					cursor: pointer;
 					padding: 0rem 1.5rem 0.125rem;
 					font-size: 1rem;
@@ -77,6 +85,11 @@ div.content {
 					border-color: rgb(196, 33, 42);
 					border-image: initial;
 					
+					&:disabled {
+						cursor:not-allowed;
+						opacity: 0.65; 
+
+					}
 					&:hover {
 						background-color:  rgb(166, 28, 30);
 					}
@@ -110,7 +123,7 @@ div.content {
 	}
 
 	.slider {
-	  background-color: #ccc;
+	  background-color: #9c9c9c;
 	  bottom: 0;
 	  cursor: pointer;
 	  left: 0;
@@ -139,7 +152,7 @@ div.content {
 	}
 
 	input:checked + .slider {
-	  background-color: #66bb6a;
+	  background-color: #47a24b;
 	  
 	  &.slider:before {
 		transform: translateX(26px);

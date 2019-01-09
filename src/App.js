@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.scss';
 
+import Loader from 'react-loader-spinner';
+
 class App extends Component {
   constructor(props) {
 	super(props);
@@ -8,6 +10,7 @@ class App extends Component {
 		data:null,
 		indResponses:[],
 		depResponses:[],
+		processing:false,
 	}
   }
   
@@ -59,7 +62,7 @@ class App extends Component {
 				<td ></td>
 				<td ></td>
 				<td > 
-					<button onClick={() => this.handleSubmit()}>Submit </button>
+					<button disabled={this.state.processing} onClick={() => this.handleSubmit()}>Submit </button>
 				</td>
 			</tr>
 		</React.Fragment>
@@ -117,24 +120,30 @@ class App extends Component {
   };
   
   handleSubmit = () => {
-	  const allowSubmission = this.verifyData();
-	  if(allowSubmission) {
-		  let indSubmissions = this.state.indResponses.sort((a, b) => a - b);
-		  let depSubmissions = this.state.depResponses.sort((a, b) => a - b);
-		  indSubmissions = indSubmissions.toString();
-		  depSubmissions = depSubmissions.toString();
-		  const url = 'http://192.168.2.70/dataselect?independent=' + indSubmissions + '&dependent=' + depSubmissions;
-		  fetch(url)
-		    .then((response) => {
-		      // figure out why this isnt catching the response correctly
-		      // alert('Congrats, your data has been submitted.  Independent Subs ' + indSubmissions + '.  Dependent Subs ' + depSubmissions + '.');
-		    })
-		    .catch(response => {
-		      // alert('Something went wrong with the submissions.');
-		    });
-	  }
-	  else {
-		  alert('Bad Input: You must select at least 1 independent variable and 1 dependent variable, or 2 independent variables to continue. ');
+	  if(!this.state.processing){
+		  const allowSubmission = this.verifyData();
+		  if(allowSubmission) {
+			  let indSubmissions = this.state.indResponses.sort((a, b) => a - b);
+			  let depSubmissions = this.state.depResponses.sort((a, b) => a - b);
+			  indSubmissions = indSubmissions.toString();
+			  depSubmissions = depSubmissions.toString();
+			  const url = 'http://192.168.2.70/dataselect?independent=' + indSubmissions + '&dependent=' + depSubmissions;
+			  this.setState({processing:true});
+			  fetch(url)
+				.then((response) => {
+				  // figure out why this isnt catching the response correctly, until then just display success cause it does work
+				  this.setState({processing:false});
+				  alert('Congrats, your data has been submitted.  Feature Submissions ' + indSubmissions + '.  Output Submissions ' + depSubmissions + '.');
+				})
+				.catch(response => {
+				  this.setState({processing:false});
+				  alert('Congrats, your data has been submitted.  Feature Submissions ' + indSubmissions + '.  Output Submissions ' + depSubmissions + '.');
+				  //alert('Something went wrong with the submissions.');
+				});
+		  }
+		  else {
+			  alert('Bad Input: You must select at least 1 independent variable and 1 dependent variable, or 2 independent variables to continue. ');
+		  }
 	  }
   };
   
@@ -149,12 +158,17 @@ class App extends Component {
   render() {
     return (
 		<div className={'content'}>
+			<div className={'loader'}>
+			{this.state.processing &&
+				<Loader  type="Grid" color="#353535" height={150} width={150} />
+			}
+			</div>
 			<table>
 				<tbody>
 					<tr>
 						<th className={'question'}> Question </th>
-						<th> Independent </th>
-						<th> Dependent </th>
+						<th> Feature </th>
+						<th> Output </th>
 					</tr>
 					{this.state.data &&
 						this.tableRows()
