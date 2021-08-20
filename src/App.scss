@@ -8,9 +8,9 @@ div.content {
 		position: fixed;
 		left: 50%;
 		top: 35%;
-		z-index: 9999;
+		z-index: 1000;
 	}
-	table {
+	.table {
 		width:100%;
 		border: 1px solid grey;
 		border-collapse: collapse;
@@ -22,18 +22,35 @@ div.content {
 		text-size-adjust: none;
 		cursor: default;
 		
-		th {
+		.header {
 			background-color: #353535;
+			height:65px;
+			display:flex;
+			span {
 			color: white;
 			padding: 1rem 0;
+			padding-right: 1rem;
 			font-size: 1.25rem;
+				&:first-of-type{
+					width: 70%;
+					padding-left:1rem;
+					display:flex;
+					justify-content:flex-start;
+				}
+				&:not(first-of-type){
+					width: 15%;
+					display:flex;
+					justify-content:center;
+				}
+			}
 		}
-		tr {
+		div {
 			&.question-row {
+				display:flex;
 				border-bottom: 1px solid grey;
 				font-size: 1rem;
 				font-weight: bold;
-				td {
+				div {
 					padding: .4rem 0rem;
 					input {
 						cursor: pointer;
@@ -48,12 +65,29 @@ div.content {
 					background-color: rgb(128,223,96);
 					transition: background-color .5s ease;
 				}
+
+				>div {
+					&:first-of-type{
+						width: 70%;
+						padding-left:1rem;
+						display:flex;
+						justify-content:flex-start;
+					}
+					&:not(first-of-type){
+						width: 15%;
+						display:flex;
+						justify-content:center;
+					}
+				}
 			
 			}
 			
-			&.submit-row {
+			&.submit {
 				background-color: #353535;
-				
+				height:65px;
+				align-items: center;
+				display: flex;
+   				justify-content: flex-end;
 				button {
 					outline: none;
 					cursor: pointer;
@@ -84,7 +118,8 @@ div.content {
 					border-style: solid;
 					border-color: rgb(196, 33, 42);
 					border-image: initial;
-					
+					align-items: center;
+
 					&:disabled {
 						cursor:not-allowed;
 						opacity: 0.65; 
@@ -93,18 +128,7 @@ div.content {
 					&:hover {
 						background-color:  rgb(166, 28, 30);
 					}
-				}
-				td {
-					padding: 1rem 1rem;
-				}
-			}
-			td, th {
-				width: 15%;
-				text-align: center;
-				&.question {
-					text-align: left;
-					width:70%;
-					padding-left:1rem;
+					margin-right:2rem;
 				}
 			}
 			
@@ -159,3 +183,21 @@ div.content {
 	  }
 	}
 }
+
+.rows {
+	overflow-y:auto;
+    width: 100%;
+    max-height: calc(100vh - 10.5rem);
+}
+
+.page-disable{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: none;
+    opacity: 0.8;
+    z-index: 998;
+    height: 100%;
+    width: 100%;
+}
+

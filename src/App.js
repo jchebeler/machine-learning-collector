@@ -29,42 +29,35 @@ class App extends Component {
   
   updateData = (result) => {
 	// manipulate the results for just the questions
-	let questions = result.data[1].slice(10,result.data[1].length);
+	let questions = result.data[0];
 	this.setState({data: questions});
   };
   
   tableRows = () => {
 	let rows = this.state.data.map((row, key) => {
       return (
-        <tr className={'question-row'} key={key}>
-			<td className={'question'}> {`${key + 1}) ${row}`} </td>
-			<td >
-				<label class="switch">
-					<input type="checkbox" value="inp" name={`question_${key}`} checked={this.state.indResponses.indexOf(key) > -1} 
-						onChange={(e) => this.handleChange(e, key, 'inp')} />
-					<span class="slider round"></span>
-				</label>
-			</td>
-			<td >
-				<label class="switch">
-					<input type="checkbox" value="dep"  name={`question_${key}`} checked={this.state.depResponses.indexOf(key) > -1} 
-						onChange={(e) => this.handleChange(e, key, 'dep')} />
-					<span class="slider round"></span>
-				</label>
-			</td>
-		</tr>
+        <div className={'question-row'} key={key}>
+					<div className={'question'}> {`${key + 1}) ${row}`} </div>
+					<div >
+						<label class="switch">
+							<input type="checkbox" value="inp" name={`question_${key}`} checked={this.state.indResponses.indexOf(key) > -1} 
+								onChange={(e) => this.handleChange(e, key, 'inp')} />
+							<span class="slider round"></span>
+						</label>
+					</div>
+					<div >
+						<label class="switch">
+							<input type="checkbox" value="dep"  name={`question_${key}`} checked={this.state.depResponses.indexOf(key) > -1} 
+								onChange={(e) => this.handleChange(e, key, 'dep')} />
+							<span class="slider round"></span>
+						</label>
+					</div>
+				</div>
       );
     });
 	return (
 		<React.Fragment>
 			{rows}
-			<tr className={'submit-row'}>
-				<td ></td>
-				<td ></td>
-				<td > 
-					<button disabled={this.state.processing} onClick={() => this.handleSubmit()}>Submit </button>
-				</td>
-			</tr>
 		</React.Fragment>
 	);
   };
@@ -159,26 +152,30 @@ class App extends Component {
     return (
 		<div className={'content'}>
 			<div className={'loader'}>
+			{/*this.state.processing && <div class='page-disable'></div>*/}
 			{this.state.processing &&
 				<Loader  type="Grid" color="#353535" height={150} width={150} />
 			}
 			</div>
-			<table>
-				<tbody>
-					<tr>
-						<th className={'question'}> Question </th>
-						<th> Feature </th>
-						<th> Output </th>
-					</tr>
+			<div className="table">
+					<div className="header">
+						<span className={'question'}> Question </span>
+						<span> Feature Test </span>
+						<span> Output </span>
+					</div>
+					<div className="rows">
 					{this.state.data &&
 						this.tableRows()
 					}
-				</tbody>
-			</table>
-			{/*}<div>
+					</div>
+					<div className="submit">
+						<button disabled={this.state.processing} onClick={() => this.handleSubmit()}>Submit </button>
+					</div>
+			{/*<div>
 				<div>{`Independent Results: ${this.state.indResponses.length > 0 ? this.state.indResponses : 'N/A'}`}</div> 
 				<div>{`Dependent Results: ${this.state.depResponses.length > 0 ? this.state.depResponses : 'N/A'}`}</div>
 			</div>*/}
+			</div>
 		</div>
     );
   }
